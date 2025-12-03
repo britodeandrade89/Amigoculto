@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent, ExternalLink, ShoppingBag } from 'lucide-react';
+import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent, Gift } from 'lucide-react';
 import { Participant, ParticipantState, GiftSuggestion } from '../types';
 import { QUIZ_QUESTIONS, APP_ID } from '../constants';
 import { db } from '../services/firebase';
@@ -172,8 +172,11 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                 <h2 className="text-2xl font-bold text-slate-800 mb-2">
                     Sugestões Encontradas!
                 </h2>
-                <p className="text-slate-600 leading-relaxed">
+                <p className="text-slate-600 leading-relaxed mb-4">
                     A IA analisou seu perfil. Escolha qual destas duas opções você prefere ganhar:
+                </p>
+                <p className="text-xs text-orange-600 bg-orange-50 inline-block px-3 py-1 rounded-full font-medium border border-orange-100">
+                   Preços e links visíveis apenas para seu Amigo Oculto 🤫
                 </p>
             </div>
 
@@ -200,20 +203,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                              </div>
                         </div>
                         <h3 className="font-bold text-xl text-slate-800 leading-snug mb-2">{cand.gift}</h3>
-                        <p className="text-sm text-slate-500 mb-4 italic leading-relaxed">"{cand.reason}"</p>
-                        
-                        <div className="flex items-center justify-between pt-4 border-t border-slate-100/50">
-                            <p className="text-xs text-green-700 font-bold bg-green-50 px-2 py-1 rounded">~ {cand.estimated_price}</p>
-                            <a 
-                            href={cand.mlLink} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()} 
-                            className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-                            >
-                                Ver no Mercado Livre <ExternalLink size={12}/>
-                            </a>
-                        </div>
+                        <p className="text-sm text-slate-500 italic leading-relaxed">"{cand.reason}"</p>
                     </button>
                 ))}
             </div>
@@ -259,16 +249,9 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                 
                 <p className="text-[10px] text-purple-400 uppercase tracking-wider font-bold mb-2">Baseado no Perfil</p>
                 <p className="text-lg text-slate-800 font-medium leading-tight mb-2">{aiResult.gift}</p>
-                <p className="text-sm text-green-600 font-bold mb-3">~ {aiResult.estimated_price}</p>
-
-                <a 
-                href={aiResult.mlLink}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-3 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm"
-                >
-                <ShoppingBag size={16} /> Ver no Mercado Livre
-                </a>
+                <p className="text-xs text-slate-400 italic">
+                    Valor e link disponíveis apenas para o seu amigo secreto.
+                </p>
             </div>
             )}
         </div>
