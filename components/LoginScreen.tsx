@@ -15,11 +15,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ participants, participantsSta
   return (
     <div className="space-y-8 pt-6 animate-fade-in">
       <div className="text-center space-y-3">
-        <div className="inline-block p-3 rounded-full bg-red-50 border border-red-100 shadow-inner mb-2">
-            <Users className="w-8 h-8 text-red-600" />
+        <div className="inline-block p-3 rounded-full bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 shadow-inner mb-2">
+            <Users className="w-8 h-8 text-red-600 dark:text-red-400" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800">Quem vai brincar?</h2>
-        <p className="text-slate-500 text-sm max-w-[200px] mx-auto leading-relaxed">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Quem vai brincar?</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm max-w-[200px] mx-auto leading-relaxed">
             Selecione seu nome para entrar na brincadeira e cadastrar seus presentes.
         </p>
       </div>
