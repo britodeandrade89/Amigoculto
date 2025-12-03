@@ -2,33 +2,38 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Declare the global variable that is injected by the environment
-declare const __firebase_config: string | undefined;
+// Declare the global variable that is injected by the environment.
+// Using 'var' and 'any' is safer for global injections that might conflict with block scopes.
+declare var __firebase_config: any;
 
 const getFirebaseConfig = () => {
-  // 1. Try accessing the global variable directly (common in this environment)
+  let rawConfig = null;
+
   try {
-    if (typeof __firebase_config !== 'undefined') {
-      return JSON.parse(__firebase_config);
+    // 1. Try accessing via window object (Standard for client-side injection)
+    if (typeof window !== 'undefined' && (window as any).__firebase_config) {
+      rawConfig = (window as any).__firebase_config;
+    }
+    // 2. Try accessing the global variable directly
+    else if (typeof __firebase_config !== 'undefined') {
+      rawConfig = __firebase_config;
     }
   } catch (e) {
-    // Ignore ReferenceErrors or ParseErrors
+    // Ignore access errors
   }
 
-  // 2. Try accessing via window object
-  if (typeof window !== 'undefined' && (window as any).__firebase_config) {
+  if (rawConfig) {
     try {
-      const configStr = (window as any).__firebase_config;
-      return typeof configStr === 'string' ? JSON.parse(configStr) : configStr;
+      // If it's a string, parse it. If it's already an object, use it.
+      return typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
     } catch (e) {
-      console.error("Failed to parse firebase config from window", e);
+      console.error("Failed to parse firebase config", e);
     }
   }
 
-  // 3. Fallback (This will cause auth errors if real config is missing)
-  console.warn("Firebase config not found. Using mock config.");
+  console.warn("Firebase config not found. Falling back to mock (Auth will fail).");
   return {
-      apiKey: "mock_key",
+      apiKey: "mock_key_fallback",
       authDomain: "mock.firebaseapp.com",
       projectId: "mock-project",
   };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent, Gift } from 'lucide-react';
+import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent } from 'lucide-react';
 import { Participant, ParticipantState, GiftSuggestion } from '../types';
 import { QUIZ_QUESTIONS, APP_ID } from '../constants';
 import { db } from '../services/firebase';
@@ -35,7 +35,6 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
       setStep('selection');
     } catch (error) {
       console.error("Error generating suggestions", error);
-      // Even in error, gemini service provides fallback, but if that fails too:
       setStep('manual'); 
     }
   };
@@ -65,11 +64,11 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
 
   if (step === 'manual') {
     return (
-      <div className="space-y-6 pt-4 animate-slide-up">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-800 text-center relative overflow-hidden transition-colors">
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 to-red-600"></div>
+      <div className="space-y-6 pt-6 px-2 animate-slide-up">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-b-8 border-red-700 text-center relative overflow-hidden transition-colors">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-green-600"></div>
           
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2 mt-8">Olá, {participant.name.split(' ')[0]}!</h2>
+          <h2 className="text-3xl font-christmas text-slate-800 dark:text-slate-100 mb-2 mt-4">Olá, {participant.name.split(' ')[0]}!</h2>
           <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-xs mx-auto leading-relaxed">
              Para começar, conte o que você gostaria de ganhar (até R$ 50).
           </p>
@@ -86,7 +85,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                 setCurrentQuestionIndex(0);
                 setStep('quiz');
             }}
-            className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold disabled:opacity-50 hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] shadow-lg"
+            className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold disabled:opacity-50 hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] shadow-lg border-b-4 border-black dark:border-slate-900"
           >
             Continuar para o Analista IA
           </button>
@@ -97,10 +96,10 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
 
   if (step === 'quiz') {
     return (
-      <div className="space-y-6 pt-4 animate-slide-up">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-800 relative overflow-hidden transition-colors">
-          <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500" style={{width: `${((currentQuestionIndex + 1) / 10) * 100}%`}}></div>
-          <div className="flex items-center gap-3 mb-8 text-purple-700 dark:text-purple-400">
+      <div className="space-y-6 pt-6 px-2 animate-slide-up">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-b-8 border-purple-700 relative overflow-hidden transition-colors">
+          <div className="absolute top-0 left-0 h-2 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500" style={{width: `${((currentQuestionIndex + 1) / 10) * 100}%`}}></div>
+          <div className="flex items-center gap-3 mb-8 text-purple-700 dark:text-purple-400 mt-2">
             <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                 <BrainCircuit className="w-6 h-6" />
             </div>
@@ -142,7 +141,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                 else handleGenerateSuggestion();
               }}
               disabled={!quizAnswers[currentQuestionIndex]}
-              className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-8 py-3 rounded-xl font-bold disabled:opacity-50 transition-all shadow-lg shadow-purple-200 dark:shadow-none"
+              className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-8 py-3 rounded-xl font-bold disabled:opacity-50 transition-all shadow-lg shadow-purple-200 dark:shadow-none border-b-4 border-purple-800"
             >
               {currentQuestionIndex === 9 ? 'Gerar Sugestões' : 'Próxima'}
             </button>
@@ -155,20 +154,22 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
   if (step === 'generating') {
     return (
       <div className="flex flex-col items-center justify-center pt-24 text-center animate-pulse px-6">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-full shadow-xl mb-6 relative">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-full shadow-2xl mb-6 relative border-4 border-white dark:border-slate-800">
             <div className="absolute inset-0 bg-purple-100 dark:bg-purple-900/30 rounded-full animate-ping opacity-75"></div>
             <Wand2 className="w-12 h-12 text-purple-600 dark:text-purple-400 relative z-10" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">A Mágica está Acontecendo...</h2>
-        <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto">Nossa IA está analisando seu perfil para encontrar 2 presentes perfeitos até R$ 50,00.</p>
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-xl p-4 shadow-lg">
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">A Mágica está Acontecendo...</h2>
+            <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto">Nossa IA está analisando seu perfil para encontrar 2 presentes perfeitos até R$ 50,00.</p>
+        </div>
       </div>
     );
   }
 
   if (step === 'selection' && aiCandidates) {
       return (
-        <div className="space-y-6 pt-4 animate-slide-up pb-20">
-            <div className="text-center px-4">
+        <div className="space-y-6 pt-6 animate-slide-up pb-20 px-2">
+            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border-b-8 border-purple-700 text-center">
                 <div className="inline-flex items-center justify-center p-3 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full mb-4">
                     <Sparkles size={24} />
                 </div>
@@ -188,10 +189,10 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                     <button 
                         key={idx}
                         onClick={() => setSelectedCandidateIndex(idx)}
-                        className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 text-left w-full ${
+                        className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 text-left w-full shadow-md ${
                             selectedCandidateIndex === idx 
                             ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/20 shadow-xl scale-[1.02] ring-2 ring-purple-200 dark:ring-purple-900/50' 
-                            : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-lg'
+                            : 'border-white dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-purple-200 dark:hover:border-purple-800'
                         }`}
                     >
                         {selectedCandidateIndex === idx && (
@@ -220,7 +221,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                 <button 
                     disabled={selectedCandidateIndex === null}
                     onClick={confirmSelection}
-                    className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02]"
+                    className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] border-b-4 border-black dark:border-slate-900"
                 >
                     Confirmar Minha Escolha
                 </button>
@@ -231,8 +232,8 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
 
   if (step === 'review') {
     return (
-      <div className="space-y-6 pt-8 animate-slide-up">
-        <div className="bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50 p-6 rounded-3xl flex flex-col items-center gap-3 text-center shadow-sm">
+      <div className="space-y-6 pt-6 px-2 animate-slide-up">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm p-6 rounded-3xl shadow-2xl border-b-8 border-green-700 flex flex-col items-center gap-3 text-center">
           <div className="p-3 bg-green-200 dark:bg-green-800 rounded-full text-green-700 dark:text-green-300">
             <CheckCircle className="w-8 h-8" />
           </div>
@@ -243,14 +244,14 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
         </div>
 
         <div className="space-y-4">
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden transition-colors">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md relative overflow-hidden transition-colors">
             <div className="absolute top-0 right-0 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[10px] px-3 py-1 rounded-bl-xl font-bold">OPÇÃO 1</div>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-bold mb-2">Escolha Pessoal</p>
             <p className="text-lg text-slate-800 dark:text-slate-100 font-medium">{manualGift}</p>
             </div>
 
             {aiResult && (
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-purple-100 dark:border-purple-900/30 shadow-sm relative overflow-hidden transition-colors">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-purple-100 dark:border-purple-900/30 shadow-md relative overflow-hidden transition-colors">
                 <div className="absolute top-0 right-0 bg-purple-600 text-white text-[10px] px-3 py-1 rounded-bl-xl font-bold flex items-center gap-1">
                 <BrainCircuit size={10}/> Opção IA (Escolhida)
                 </div>
@@ -265,12 +266,12 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-4">
-            <button onClick={() => setStep('manual')} className="w-full text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium py-3 rounded-xl text-sm transition">
+            <button onClick={() => setStep('manual')} className="w-full text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 font-medium py-3 rounded-xl text-sm transition shadow-sm">
                 Refazer tudo
             </button>
             <button 
             onClick={onComplete}
-            className="w-full bg-slate-900 dark:bg-slate-800 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-black dark:hover:bg-slate-700 transition flex items-center justify-center gap-2"
+            className="w-full bg-slate-900 dark:bg-slate-800 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-black dark:hover:bg-slate-700 transition flex items-center justify-center gap-2 border-b-4 border-black dark:border-slate-900"
             >
             Ir para o Painel
             </button>

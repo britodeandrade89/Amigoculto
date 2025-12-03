@@ -89,8 +89,8 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
     const targetParticipantInfo = allParticipants.find(p => p.id === myTarget.id);
     const isTargetPet = targetParticipantInfo?.type === 'pet';
     return (
-      <div className="pt-10 space-y-8 animate-zoom-in text-center px-4">
-        <div className="inline-block p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-yellow-600 dark:text-yellow-400 mb-2 shadow-inner">
+      <div className="pt-6 space-y-6 animate-zoom-in text-center px-4 bg-white/95 dark:bg-slate-900/95 rounded-3xl shadow-2xl pb-8 mt-4 mx-2">
+        <div className="inline-block p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-yellow-600 dark:text-yellow-400 mb-2 shadow-inner mt-6">
             <PartyPopper size={32} />
         </div>
         
@@ -105,7 +105,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
             </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl overflow-hidden text-left mx-2 border border-slate-100 dark:border-slate-800 transition-colors">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl overflow-hidden text-left border border-slate-100 dark:border-slate-800 transition-colors">
           <div className="bg-slate-50 dark:bg-slate-800 p-4 text-center border-b border-slate-100 dark:border-slate-700">
              <h4 className="font-bold text-slate-600 dark:text-slate-300 text-sm tracking-wide">LISTA DE DESEJOS (ATÉ R$ 50)</h4>
           </div>
@@ -148,7 +148,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-3 pb-8">
+        <div className="grid grid-cols-2 gap-3 pb-2">
             <button onClick={() => setRevealing(false)} className="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">
                 Voltar
             </button>
@@ -172,12 +172,12 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
   }
 
   return (
-    <div className="space-y-6 pt-6">
+    <div className="space-y-4 pt-4 px-2">
       {/* MODAL DE SENHA */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl relative overflow-hidden transition-colors">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-purple-600"></div>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl relative overflow-hidden transition-colors border-4 border-yellow-500">
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-green-600"></div>
             
             <div className="flex justify-between items-center mb-6">
                <h3 className="font-bold text-xl text-slate-800 dark:text-slate-100 flex items-center gap-2"><Lock size={20} className="text-slate-400"/> Segurança</h3>
@@ -194,7 +194,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
                 <input 
                 type="password" 
                 autoFocus
-                className="w-full text-center text-3xl font-black tracking-[0.5em] p-4 border-2 border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-500 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all text-slate-800 dark:text-slate-100"
+                className="w-full text-center text-3xl font-black tracking-[0.5em] p-4 border-2 border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30 outline-none transition-all text-slate-800 dark:text-slate-100"
                 placeholder="••••"
                 maxLength={4}
                 value={passwordInput}
@@ -207,7 +207,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
 
             <button 
               onClick={handlePasswordSubmit}
-              className="w-full bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-700 dark:to-slate-800 text-white py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all active:scale-95"
+              className="w-full bg-gradient-to-r from-green-700 to-green-800 text-white py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all active:scale-95 border-b-4 border-green-900"
             >
               CONFIRMAR SORTEIO
             </button>
@@ -215,126 +215,130 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
         </div>
       )}
 
-      <div className={`flex items-center justify-between p-5 rounded-2xl shadow-sm border transition-colors ${myData?.status === 'ready' ? 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-900' : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}>
-        <div>
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Olá, {currentUser.name.split(' ')[0]}!</h2>
-          <div className="flex items-center gap-2 mt-1">
-             {myData?.status === 'ready' ? (
-                <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                    <CheckCircle size={14} className="fill-green-600 text-white dark:text-slate-900"/>
-                    <p className="text-xs font-bold uppercase tracking-wide">Concluído</p>
-                </div>
-             ) : (
-                <div className="flex items-center gap-1.5 text-orange-500 dark:text-orange-400">
-                    <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
-                    <p className="text-xs font-bold uppercase tracking-wide">Pendente</p>
-                </div>
-             )}
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-            <button 
-                onClick={onViewProfile} 
-                className={`text-xs font-bold transition px-4 py-2 rounded-lg border ${
-                    myData?.status === 'ready' 
-                    ? 'border-green-200 text-green-700 hover:bg-green-100 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-900/40' 
-                    : 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 border-transparent shadow-lg'
-                }`}
-            >
-                {myData?.status === 'ready' ? 'EDITAR' : 'COMPLETAR'}
-            </button>
-        </div>
-      </div>
-
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors">
-        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
-          <h3 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 text-lg">
-            <Users className="w-5 h-5 text-slate-400" /> Participantes
-          </h3>
-          <span className={`px-3 py-1 rounded-full text-xs font-bold ${readyCount === allParticipants.length ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
-            {readyCount} / {allParticipants.length} Prontos
-          </span>
+      {/* DASHBOARD CONTAINER - White card look */}
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border-b-8 border-red-700">
+        
+        <div className={`flex items-center justify-between p-5 rounded-2xl shadow-sm border mb-6 transition-colors ${myData?.status === 'ready' ? 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-900' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'}`}>
+            <div>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Olá, {currentUser.name.split(' ')[0]}!</h2>
+            <div className="flex items-center gap-2 mt-1">
+                {myData?.status === 'ready' ? (
+                    <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+                        <CheckCircle size={14} className="fill-green-600 text-white dark:text-slate-900"/>
+                        <p className="text-xs font-bold uppercase tracking-wide">Concluído</p>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-1.5 text-orange-500 dark:text-orange-400">
+                        <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                        <p className="text-xs font-bold uppercase tracking-wide">Pendente</p>
+                    </div>
+                )}
+            </div>
+            </div>
+            <div className="flex items-center gap-3">
+                <button 
+                    onClick={onViewProfile} 
+                    className={`text-xs font-bold transition px-4 py-3 rounded-lg border shadow-sm ${
+                        myData?.status === 'ready' 
+                        ? 'border-green-200 text-green-700 bg-white hover:bg-green-50 dark:bg-slate-800 dark:border-green-800 dark:text-green-400' 
+                        : 'bg-green-700 text-white hover:bg-green-800 border-green-800 shadow-md'
+                    }`}
+                >
+                    {myData?.status === 'ready' ? 'EDITAR' : 'COMPLETAR'}
+                </button>
+            </div>
         </div>
 
-        <div className="p-4 space-y-2">
-          {allParticipants.map(p => {
-             const pData = participantsState[p.id];
-             const isReady = pData?.status === 'ready';
-             return (
-               <div key={p.id} className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
-                   isReady 
-                   ? 'border-green-100 dark:border-green-900 bg-green-50/30 dark:bg-green-900/10' 
-                   : 'border-orange-100 dark:border-orange-900/50 bg-orange-50/30 dark:bg-orange-900/10'
-                }`}>
-                 <div className="flex items-center w-full">
-                   <div className="flex flex-col">
-                      <span className={`font-bold text-sm ${isReady ? 'text-green-900 dark:text-green-300' : 'text-orange-900 dark:text-orange-300'}`}>{p.name}</span>
-                      {isReady 
-                        ? <span className="text-[10px] font-bold text-green-600 dark:text-green-400 flex items-center gap-1"><CheckCircle size={10}/> Concluído</span>
-                        : <span className="text-[10px] font-bold text-orange-500 dark:text-orange-400 flex items-center gap-1"><Clock size={10}/> Pendente</span>
-                      }
-                   </div>
-                 </div>
-                 
-                 {!isReady && (
-                   <a 
-                    href={getWhatsAppLink(p.phone, 'remind', {name: p.name})} 
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 text-lg">
+                <Users className="w-5 h-5 text-slate-400" /> Participantes
+            </h3>
+            <span className={`px-3 py-1 rounded-full text-xs font-bold ${readyCount === allParticipants.length ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                {readyCount} / {allParticipants.length} Prontos
+            </span>
+            </div>
+
+            <div className="p-4 space-y-2">
+            {allParticipants.map(p => {
+                const pData = participantsState[p.id];
+                const isReady = pData?.status === 'ready';
+                return (
+                <div key={p.id} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
+                    isReady 
+                    ? 'border-green-100 dark:border-green-900 bg-white dark:bg-slate-800 shadow-sm' 
+                    : 'border-transparent hover:bg-white dark:hover:bg-slate-800'
+                    }`}>
+                    <div className="flex items-center w-full">
+                    <div className="flex flex-col">
+                        <span className={`font-bold text-sm ${isReady ? 'text-green-800 dark:text-green-300' : 'text-slate-600 dark:text-slate-300'}`}>{p.name}</span>
+                        {isReady 
+                            ? <span className="text-[10px] font-bold text-green-600 dark:text-green-400 flex items-center gap-1"><CheckCircle size={10}/> Concluído</span>
+                            : <span className="text-[10px] font-bold text-orange-500 dark:text-orange-400 flex items-center gap-1"><Clock size={10}/> Pendente</span>
+                        }
+                    </div>
+                    </div>
+                    
+                    {!isReady && (
+                    <a 
+                        href={getWhatsAppLink(p.phone, 'remind', {name: p.name})} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-green-600 dark:hover:text-green-400 hover:border-green-200 shadow-sm transition-all active:scale-90" 
+                        title="Cobrar no WhatsApp"
+                    >
+                        <MessageCircle size={18} />
+                    </a>
+                    )}
+                </div>
+                )
+            })}
+            </div>
+            
+            <div className="p-6 bg-slate-100 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+            {!isDrawDone && (
+                <div className="text-center">
+                {allReady ? (
+                    <button 
+                    onClick={initiateDraw}
+                    className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-5 rounded-xl font-bold text-lg shadow-xl shadow-red-200 dark:shadow-none transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 relative overflow-hidden group border-b-4 border-red-900"
+                    >
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    <Wand2 className="animate-pulse" /> REALIZAR SORTEIO AGORA
+                    </button>
+                ) : (
+                    <div className="bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 p-4 rounded-2xl flex items-center justify-center gap-3 text-sm border border-orange-100 dark:border-orange-900/50 shadow-sm">
+                    <Lock className="w-5 h-5 flex-shrink-0 text-orange-400 dark:text-orange-300" />
+                    <span className="font-medium">O sorteio será liberado quando todos ficarem verdes.</span>
+                    </div>
+                )}
+                </div>
+            )}
+            {isDrawDone && (
+                <div className="text-center animate-bounce-in space-y-4">
+                <div className="bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-900/50 text-green-800 dark:text-green-200 p-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm">
+                    <CheckCircle size={24} className="fill-green-600 dark:fill-green-500 text-white dark:text-slate-900"/> Sorteio Realizado!
+                </div>
+                
+                <button 
+                    onClick={() => setRevealing(true)} 
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white py-5 rounded-2xl font-black text-xl shadow-xl shadow-yellow-200 dark:shadow-none transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 border-b-4 border-orange-700"
+                >
+                    <Gift className="w-8 h-8" /> VER MEU AMIGO
+                </button>
+                
+                <a 
+                    href={getWhatsAppLink('', 'drawAnnounce')} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-green-600 dark:hover:text-green-400 hover:border-green-200 shadow-sm transition-all active:scale-90" 
-                    title="Cobrar no WhatsApp"
-                   >
-                     <MessageCircle size={18} />
-                   </a>
-                 )}
-               </div>
-             )
-          })}
-        </div>
-        
-        <div className="p-6 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
-          {!isDrawDone && (
-            <div className="text-center">
-              {allReady ? (
-                <button 
-                  onClick={initiateDraw}
-                  className="w-full bg-gradient-to-r from-red-600 to-purple-700 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-red-200 dark:shadow-none transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 relative overflow-hidden group"
+                    className="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-lg shadow-green-200 dark:shadow-none border-b-4 border-green-800"
                 >
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                  <Wand2 className="animate-pulse" /> REALIZAR SORTEIO AGORA
-                </button>
-              ) : (
-                <div className="bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 p-4 rounded-2xl flex items-center justify-center gap-3 text-sm border border-orange-100 dark:border-orange-900/50 shadow-sm">
-                  <Lock className="w-5 h-5 flex-shrink-0 text-orange-400 dark:text-orange-300" />
-                  <span className="font-medium">O sorteio será liberado quando todos ficarem verdes.</span>
+                    <Share2 size={20} /> AVISAR NO GRUPO 📢
+                </a>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2">Toque para avisar a todos que o resultado saiu!</p>
                 </div>
-              )}
+            )}
             </div>
-          )}
-          {isDrawDone && (
-            <div className="text-center animate-bounce-in space-y-4">
-              <div className="bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-900/50 text-green-800 dark:text-green-200 p-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm">
-                <CheckCircle size={24} className="fill-green-600 dark:fill-green-500 text-white dark:text-slate-900"/> Sorteio Realizado!
-              </div>
-              
-              <button 
-                onClick={() => setRevealing(true)} 
-                className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white py-5 rounded-2xl font-black text-xl shadow-xl shadow-yellow-200 dark:shadow-none transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
-              >
-                <Gift className="w-8 h-8" /> VER MEU AMIGO
-              </button>
-              
-              <a 
-                href={getWhatsAppLink('', 'drawAnnounce')} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-lg shadow-green-200 dark:shadow-none"
-              >
-                <Share2 size={20} /> AVISAR NO GRUPO 📢
-              </a>
-              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2">Toque para avisar a todos que o resultado saiu!</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

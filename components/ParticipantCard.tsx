@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, Dog, Gift } from 'lucide-react';
+import { CheckCircle, Gift, Trees } from 'lucide-react';
 import { Participant, ParticipantState } from '../types';
 
 interface ParticipantCardProps {
@@ -15,37 +15,32 @@ const ParticipantCard: React.FC<ParticipantCardProps> = ({ p, state, onSelect, i
   return (
     <button
       onClick={() => onSelect(p.id)}
-      className={`group relative flex items-center justify-between p-4 rounded-2xl shadow-sm border transition-all duration-300 active:scale-[0.98] text-left w-full overflow-hidden
-        ${isReady 
-            ? 'bg-white dark:bg-slate-900 border-green-200 dark:border-green-900 shadow-green-100/50 dark:shadow-none hover:shadow-green-200 dark:hover:border-green-700 hover:-translate-y-1' 
-            : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-red-200 dark:hover:border-red-900/50 hover:shadow-md hover:-translate-y-1'
-        }`}
+      className="bg-white dark:bg-slate-800 rounded-xl p-3 pl-5 shadow-lg flex items-center justify-between w-full transition-transform active:scale-[0.98] border-b-4 border-slate-200 dark:border-slate-700"
     >
-      {isReady && <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/5 dark:bg-green-500/10 rotate-45 translate-x-8 -translate-y-8"></div>}
-      
-      <div className="flex items-center z-10 w-full">
-        <div>
-          <span className={`block font-bold text-lg flex items-center gap-2 transition-colors ${isReady ? 'text-green-800 dark:text-green-400' : 'text-slate-700 dark:text-slate-200 group-hover:text-red-700 dark:group-hover:text-red-400'}`}>
-            {p.name} {isPet && <Dog size={14} className="text-orange-500"/>}
-          </span>
-          <span className={`text-xs font-medium flex items-center gap-1.5 ${isReady ? 'text-green-600 dark:text-green-500' : 'text-slate-400 dark:text-slate-500'}`}>
-             {isReady ? (
-                 <><CheckCircle size={12} className="fill-green-600 dark:fill-green-500 text-white dark:text-slate-900"/> Perfil Completo</>
-             ) : (
-                 <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></div> Aguardando...</span>
-             )}
-          </span>
+      <div className="text-left">
+        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 leading-tight">
+          {p.name}
+        </h3>
+        <div className="flex items-center gap-1 mt-1">
+            {isReady ? (
+                <>
+                    <Trees className="w-4 h-4 text-green-600" />
+                    <span className="text-xs text-green-700 font-bold">Pronto!</span>
+                </>
+            ) : (
+                <>
+                    <Trees className="w-4 h-4 text-slate-400" />
+                    <span className="text-xs text-slate-500 font-medium">Aguardando...</span>
+                </>
+            )}
         </div>
       </div>
-      {isReady ? (
-          <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-full text-green-600 dark:text-green-400">
-            <CheckCircle className="w-5 h-5" />
-          </div>
-      ) : (
-          <div className="text-slate-300 dark:text-slate-600 group-hover:text-red-400 dark:group-hover:text-red-400 transition-colors">
-            <Gift className="w-5 h-5" />
-          </div>
-      )}
+
+      <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-inner transition-colors ${
+          isReady ? 'bg-green-700 text-yellow-300' : 'bg-green-600 text-white'
+      }`}>
+        {isReady ? <CheckCircle className="w-6 h-6" /> : <Gift className="w-6 h-6" />}
+      </div>
     </button>
   );
 };

@@ -7,9 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap');
+
       body {
         font-family: 'Inter', sans-serif;
       }
+      .font-christmas {
+        font-family: 'Mountains of Christmas', cursive;
+      }
+      
+      /* Festive Background Pattern */
+      .christmas-bg {
+        background-color: #991b1b; /* Red-800 base */
+        background-image: 
+          repeating-linear-gradient(45deg, #14532d 25%, transparent 25%, transparent 75%, #14532d 75%, #14532d),
+          repeating-linear-gradient(45deg, #14532d 25%, transparent 25%, transparent 75%, #14532d 75%, #14532d);
+        background-position: 0 0, 40px 40px;
+        background-size: 80px 80px;
+      }
+
       .animate-fade-in {
         animation: fadeIn 0.5s ease-out;
       }
