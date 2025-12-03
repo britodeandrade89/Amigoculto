@@ -82,7 +82,10 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
           />
           <button 
             disabled={!manualGift.trim()}
-            onClick={() => setStep('quiz')}
+            onClick={() => {
+                setCurrentQuestionIndex(0);
+                setStep('quiz');
+            }}
             className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold disabled:opacity-50 hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] shadow-lg"
           >
             Continuar para o Analista IA
@@ -198,8 +201,13 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
                         )}
                         <div className="flex items-center justify-between mb-3">
                              <span className="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded">Opção {idx + 1}</span>
-                             <div className="flex items-center gap-1 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
-                                <Percent size={12} /> {cand.match}% Match
+                             <div className="flex flex-col items-end gap-1">
+                                <div className="flex items-center gap-1 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                                  <Percent size={12} /> {cand.match}% Match
+                                </div>
+                                <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div className="h-full bg-purple-500 dark:bg-purple-400 rounded-full" style={{width: `${cand.match}%`}}></div>
+                                </div>
                              </div>
                         </div>
                         <h3 className="font-bold text-xl text-slate-800 dark:text-slate-100 leading-snug mb-2">{cand.gift}</h3>
