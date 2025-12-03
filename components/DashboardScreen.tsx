@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { doc, writeBatch } from 'firebase/firestore';
-import { CheckCircle, Wand2, Lock, Gift, Share2, PartyPopper, Users, MessageCircle, ShoppingBag, BrainCircuit, X, KeyRound, User as UserIcon } from 'lucide-react';
+import { CheckCircle, Wand2, Lock, Gift, Share2, PartyPopper, Users, MessageCircle, ShoppingBag, BrainCircuit, X, KeyRound, User as UserIcon, Clock } from 'lucide-react';
 import { Participant, ParticipantState } from '../types';
 import { APP_ID } from '../constants';
 import { db } from '../services/firebase';
@@ -215,18 +215,32 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
         </div>
       )}
 
-      <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
+      <div className={`flex items-center justify-between p-5 rounded-2xl shadow-sm border transition-colors ${myData?.status === 'ready' ? 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-900' : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Olá, {currentUser.name.split(' ')[0]}!</h2>
           <div className="flex items-center gap-2 mt-1">
-             <div className={`w-2 h-2 rounded-full ${myData?.status === 'ready' ? 'bg-green-500' : 'bg-orange-400 animate-pulse'}`}></div>
-             <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                {myData?.status === 'ready' ? 'Perfil Ativo' : 'Pendente'}
-             </p>
+             {myData?.status === 'ready' ? (
+                <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+                    <CheckCircle size={14} className="fill-green-600 text-white dark:text-slate-900"/>
+                    <p className="text-xs font-bold uppercase tracking-wide">Concluído</p>
+                </div>
+             ) : (
+                <div className="flex items-center gap-1.5 text-orange-500 dark:text-orange-400">
+                    <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                    <p className="text-xs font-bold uppercase tracking-wide">Pendente</p>
+                </div>
+             )}
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-full border border-slate-100 dark:border-slate-700">
-            <button onClick={onViewProfile} className="text-slate-600 dark:text-slate-300 text-xs font-bold hover:text-red-600 dark:hover:text-red-400 transition px-3 py-1">
+        <div className="flex items-center gap-3">
+            <button 
+                onClick={onViewProfile} 
+                className={`text-xs font-bold transition px-4 py-2 rounded-lg border ${
+                    myData?.status === 'ready' 
+                    ? 'border-green-200 text-green-700 hover:bg-green-100 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-900/40' 
+                    : 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 border-transparent shadow-lg'
+                }`}
+            >
                 {myData?.status === 'ready' ? 'EDITAR' : 'COMPLETAR'}
             </button>
         </div>
@@ -247,13 +261,17 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ currentUser, particip
              const pData = participantsState[p.id];
              const isReady = pData?.status === 'ready';
              return (
-               <div key={p.id} className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${isReady ? 'border-green-100 dark:border-green-900 bg-green-50/30 dark:bg-green-900/10' : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+               <div key={p.id} className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                   isReady 
+                   ? 'border-green-100 dark:border-green-900 bg-green-50/30 dark:bg-green-900/10' 
+                   : 'border-orange-100 dark:border-orange-900/50 bg-orange-50/30 dark:bg-orange-900/10'
+                }`}>
                  <div className="flex items-center w-full">
                    <div className="flex flex-col">
-                      <span className={`font-bold text-sm ${isReady ? 'text-green-900 dark:text-green-300' : 'text-slate-600 dark:text-slate-300'}`}>{p.name}</span>
+                      <span className={`font-bold text-sm ${isReady ? 'text-green-900 dark:text-green-300' : 'text-orange-900 dark:text-orange-300'}`}>{p.name}</span>
                       {isReady 
-                        ? <span className="text-[10px] font-bold text-green-600 dark:text-green-400 flex items-center gap-1"><CheckCircle size={10}/> Pronto</span>
-                        : <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">Aguardando...</span>
+                        ? <span className="text-[10px] font-bold text-green-600 dark:text-green-400 flex items-center gap-1"><CheckCircle size={10}/> Concluído</span>
+                        : <span className="text-[10px] font-bold text-orange-500 dark:text-orange-400 flex items-center gap-1"><Clock size={10}/> Pendente</span>
                       }
                    </div>
                  </div>
