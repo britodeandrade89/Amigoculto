@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent } from 'lucide-react';
+import { BrainCircuit, Wand2, Sparkles, CheckCircle, Percent, Loader2 } from 'lucide-react';
 import { Participant, ParticipantState, GiftSuggestion } from '../types';
 import { QUIZ_QUESTIONS, APP_ID } from '../constants';
 import { db } from '../services/firebase';
@@ -26,6 +26,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
   const [selectedCandidateIndex, setSelectedCandidateIndex] = useState<number | null>(null);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleGenerateSuggestion = async () => {
     setStep('generating');
@@ -43,23 +44,45 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
       if (selectedCandidateIndex === null || !aiCandidates) return;
       const selected = aiCandidates[selectedCandidateIndex];
       setAiResult(selected);
-      await saveProfile(selected);
-      setStep('review');
+      
+      setIsSaving(true);
+      try {
+        await saveProfile(selected);
+        setStep('review');
+      } catch (error) {
+        console.error("Failed to save selection", error);
+        // Error alert is handled in saveProfile
+      } finally {
+        setIsSaving(false);
+      }
   };
 
   const saveProfile = async (finalResult: GiftSuggestion) => {
-    if (!user) return;
-    const docRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'secret_santa_users_v2', participant.id);
-    await setDoc(docRef, {
-      id: participant.id,
-      name: participant.name,
-      avatar: participant.avatar,
-      manualGift,
-      quizAnswers,
-      aiResult: finalResult,
-      status: 'ready',
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
+    if (!user) {
+        alert("Erro de autenticação: Usuário não conectado. Tente recarregar a página.");
+        throw new Error("User not authenticated");
+    }
+
+    try {
+        const docRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'secret_santa_users_v2', participant.id);
+        
+        // Critical: Ensure status is 'ready'
+        await setDoc(docRef, {
+            id: participant.id,
+            name: participant.name,
+            avatar: participant.avatar || '',
+            manualGift,
+            quizAnswers,
+            aiResult: finalResult,
+            status: 'ready', // This triggers the GREEN status
+            updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+    } catch (e) {
+        console.error("Firestore Save Error:", e);
+        alert("Não foi possível salvar seus dados no sistema. Verifique sua conexão e tente novamente.");
+        throw e;
+    }
   };
 
   if (step === 'manual') {
@@ -219,11 +242,18 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ user, participant, existingData
 
             <div className="fixed bottom-4 left-0 right-0 p-4 max-w-md mx-auto z-20">
                 <button 
-                    disabled={selectedCandidateIndex === null}
+                    disabled={selectedCandidateIndex === null || isSaving}
                     onClick={confirmSelection}
-                    className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] border-b-4 border-black dark:border-slate-900"
+                    className="w-full bg-slate-900 dark:bg-slate-800 text-white py-4 rounded-xl font-bold shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black dark:hover:bg-slate-700 transition-all hover:scale-[1.02] border-b-4 border-black dark:border-slate-900 flex items-center justify-center gap-2"
                 >
-                    Confirmar Minha Escolha
+                    {isSaving ? (
+                        <>
+                            <Loader2 className="animate-spin w-5 h-5" />
+                            Salvando...
+                        </>
+                    ) : (
+                        "Confirmar Minha Escolha"
+                    )}
                 </button>
             </div>
         </div>
