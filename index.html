@@ -11,19 +11,36 @@
 
       body {
         font-family: 'Inter', sans-serif;
+        background-color: #7f1d1d; /* Fallback Red */
+        overflow-x: hidden;
       }
       .font-christmas {
         font-family: 'Mountains of Christmas', cursive;
       }
       
-      /* Festive Background Pattern */
+      /* Festive Background Pattern via Pseudo-element for Blur control */
       .christmas-bg {
+        position: relative;
+        min-height: 100vh;
+      }
+      
+      .christmas-bg::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background-color: #991b1b; /* Red-800 base */
         background-image: 
           repeating-linear-gradient(45deg, #14532d 25%, transparent 25%, transparent 75%, #14532d 75%, #14532d),
           repeating-linear-gradient(45deg, #14532d 25%, transparent 25%, transparent 75%, #14532d 75%, #14532d);
         background-position: 0 0, 40px 40px;
         background-size: 80px 80px;
+        opacity: 0.15; /* Much more subtle (lower opacity) */
+        filter: blur(4px); /* Blurred effect */
+        z-index: 0;
+        pointer-events: none;
       }
 
       .animate-fade-in {
